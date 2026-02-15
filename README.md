@@ -45,29 +45,6 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-### Alternative: Optimized Installation (Recommended for Production)
-
-For better performance with large datasets, install scientific packages via conda first:
-
-```bash
-# Steps 1-2 same as above, then:
-conda install pandas numpy scipy matplotlib seaborn scikit-learn jupyter
-pip install -r requirements.txt  # Will only install duckdb
-jupyter notebook
-```
-
-This uses optimized BLAS/LAPACK libraries for faster numerical computations.
-
-### AWS Credentials (Optional)
-
-The notebooks load data from a public S3 bucket (`s3://jax-envision-public-data/`). No credentials are required for accessing public data.
-
-If you encounter authentication issues, you can configure AWS:
-```bash
-aws configure
-# Press Enter for all prompts if accessing public data only
-```
-
 ### Verify Installation
 
 Test that all packages are installed correctly:
@@ -93,6 +70,17 @@ DSC-180B-Tasks/
 │   ├── Morphine_feature_interaction.ipynb
 │   └── pca_analysis/
 │       └── PCA_analysis.ipynb
+├── morphine_features/          # Morphine feature exploration & heatmaps
+│   ├── morphine_features.ipynb
+│   ├── morphine_heatmap.ipynb
+│   └── morphine_heatmap2.ipynb
+├── test_model/                 # Opioid sensitivity prediction pipeline
+│   ├── README_FINAL (1).md
+│   ├── feature_extraction_final (1).py
+│   ├── outcome_extraction_final (1) (1).py
+│   ├── modeling_pipeline (1).py
+│   ├── dose_stratified_analysis (1).py
+│   └── ... (additional scripts)
 ├── estrous/                    # Estrous cycle detection
 │   ├── morph2rep_estrous_calendar_days.ipynb
 │   ├── estrous.ipynb
@@ -159,6 +147,46 @@ DSC-180B-Tasks/
 - Feature loading bar charts
 
 **See [technical_documentation.md](technical_documentation.md) for detailed PCA methodology.**
+
+---
+
+#### [morphine_features/](morphine_features/)
+**Morphine feature exploration and heatmap visualizations**
+
+- **[morphine_features.ipynb](morphine_features/morphine_features.ipynb)** - Feature extraction and exploration
+- **[morphine_heatmap.ipynb](morphine_features/morphine_heatmap.ipynb)** - Heatmap visualization of morphine effects
+- **[morphine_heatmap2.ipynb](morphine_features/morphine_heatmap2.ipynb)** - Additional heatmap analyses
+
+---
+
+### Modeling Pipeline
+
+#### [test_model/](test_model/)
+**Opioid sensitivity prediction pipeline**
+
+A complete pipeline for predicting morphine response from baseline behavioral features.
+
+- **[README_FINAL (1).md](test_model/README_FINAL%20(1).md)** - Full documentation and usage instructions
+- **[feature_extraction_final (1).py](test_model/feature_extraction_final%20(1).py)** - Extracts 40+ baseline behavioral features
+- **[outcome_extraction_final (1) (1).py](test_model/outcome_extraction_final%20(1)%20(1).py)** - Calculates morphine response outcomes
+- **[modeling_pipeline (1).py](test_model/modeling_pipeline%20(1).py)** - Trains and validates 4 predictive models
+- **[dose_stratified_analysis (1).py](test_model/dose_stratified_analysis%20(1).py)** - Dose-specific prediction analysis
+- **[minimal_model (1).py](test_model/minimal_model%20(1).py)** - Simplified model for quick testing
+- **[reduced_model.py](test_model/reduced_model.py)** - Feature-reduced model variant
+
+**Features extracted include:**
+- Circadian rhythm (amplitude, acrophase, robustness)
+- Locomotion metrics (distance, speed, variability)
+- Rest fragmentation (bout duration, transitions)
+- Bout structure (frequency, duration, burstiness)
+- Social behavior, respiration, drinking
+
+**Research hypotheses tested:**
+- H1: Higher circadian amplitude → greater morphine response
+- H2: Fragmented rest → greater morphine sensitivity
+- H3: Higher baseline variability → greater response
+- H4: Bout frequency-duration trade-off predicts response
+- H5: Stronger prediction at lower doses
 
 ---
 
