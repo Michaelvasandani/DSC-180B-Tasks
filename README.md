@@ -103,6 +103,8 @@ DSC-180B-Tasks/
 │   ├── smarr.ipynb
 │   ├── estrus_plateau_core_analysis.ipynb
 │   └── estrus_plateau_extended_analysis_per_cage.ipynb
+├── fault_detection/            # Tracking quality analysis
+│   └── fault_analysis.ipynb
 ├── Dockerfile                  # Docker configuration
 ├── .dockerignore               # Docker ignore patterns
 ├── requirements.txt            # Python dependencies
@@ -176,6 +178,13 @@ DSC-180B-Tasks/
 - **[morphine_features.ipynb](morphine_features/morphine_features.ipynb)** - Feature extraction and exploration
 - **[morphine_heatmap.ipynb](morphine_features/morphine_heatmap.ipynb)** - Heatmap visualization of morphine effects
 - **[morphine_heatmap2.ipynb](morphine_features/morphine_heatmap2.ipynb)** - Additional heatmap analyses
+
+---
+
+### Fault Detection
+
+#### [fault_detection/fault_analysis.ipynb](fault_detection/fault_analysis.ipynb)
+Validates tracking system quality by identifying missing data, unusual inactivity patterns, and potential sensor failures across both replicates. Aggregates quality metrics per animal and cage using heatmaps and streak detection to flag animals with poor tracking coverage.
 
 ---
 
