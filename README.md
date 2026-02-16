@@ -24,7 +24,7 @@ We developed a predictive model using three pre-drug features: baseline locomoti
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Michaelvasandani/DSC-180B-Tasks.git
    cd DSC-180B-Tasks
    ```
 
