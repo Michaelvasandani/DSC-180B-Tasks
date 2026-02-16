@@ -312,7 +312,6 @@ s3://jax-envision-public-data/study_1001/2025v3.3/tabular/
 
 ## References
 
-- Envision platform documentation: [https://envision.jax.org](https://envision.jax.org)
 - Smarr et al. wavelet estrous detection method
 - Study protocol: Morph2REP v3.3 (internal)
 
