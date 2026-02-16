@@ -1,4 +1,4 @@
-# Predicting Opioid Sensitivity from Baseline Behavioral Patterns
+# Predicting Opioid Sensitivity from Baseline Behavioral Patterns (Capstone B22)
 
 Individual differences in opioid sensitivity remain poorly understood. This project examines whether baseline behavioral patterns can predict acute morphine response in female mice. Using automated home-cage monitoring data from 54 female C57BL/6J mice, we measured morphine sensitivity as the percent increase in locomotor activity following injection relative to baseline levels.
 
