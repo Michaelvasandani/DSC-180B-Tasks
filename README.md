@@ -1,13 +1,10 @@
-# DSC-180B Tasks - Morphine & Estrous Analysis
+# Predicting Opioid Sensitivity from Baseline Behavioral Patterns
 
-> Comprehensive behavioral analysis of morphine effects and estrous cycle interactions in mice using automated monitoring data from the Morph2REP study.
+Individual differences in opioid sensitivity remain poorly understood. This project examines whether baseline behavioral patterns can predict acute morphine response in female mice. Using automated home-cage monitoring data from 54 female C57BL/6J mice, we measured morphine sensitivity as the percent increase in locomotor activity following injection relative to baseline levels.
 
-## Overview
+We developed a predictive model using three pre-drug features: baseline locomotion, circadian rhythm strength, and rest fragmentation. The model was evaluated using cage-level cross-validation to account for shared housing effects and demonstrated that baseline features could meaningfully predict variability in morphine response.
 
-This repository contains analyses for a DSC-180B capstone project examining:
-1. **Morphine behavioral effects** - Dose-response, temporal dynamics, and multi-feature behavioral signatures
-2. **Estrous cycle detection** - Activity-based cycle phase classification
-3. **Integration** - Understanding how estrous phase modulates drug response (future work)
+**Key finding:** Circadian rhythm strength emerged as the strongest predictor—mice with more robust circadian rhythms showed greater morphine-induced hyperactivity. These results suggest that baseline circadian organization may serve as a behavioral marker of opioid sensitivity and highlight the potential of home-cage monitoring to predict individual differences in drug responsiveness.
 
 **Study:** Morph2REP (Study 1001, v3.3)
 **Species:** Female C57BL/6J mice (strain 664)
@@ -16,34 +13,52 @@ This repository contains analyses for a DSC-180B capstone project examining:
 
 ---
 
+## Prerequisites
+
+- **Python 3.8+** (3.11 recommended)
+- **Docker** (optional, for containerized environment)
+
 ## Setup Instructions
 
-### Prerequisites
-- Python 3.8 or higher
-- Conda (Anaconda or Miniconda)
+### Option 1: Local Installation
 
-### Quick Start Installation
-
-1. **Navigate to the project directory**
-```bash
-cd DSC-180B-Tasks
-```
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd DSC-180B-Tasks
+   ```
 
 2. **Create and activate conda environment**
-```bash
-conda create -n morphine-analysis python=3.11
-conda activate morphine-analysis
-```
+   ```bash
+   conda create -n morphine-analysis python=3.11
+   conda activate morphine-analysis
+   ```
 
-3. **Install all required packages**
-```bash
-pip install -r requirements.txt
-```
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. **Launch Jupyter**
-```bash
-jupyter notebook
-```
+4. **Launch Jupyter Lab**
+   ```bash
+   jupyter lab
+   ```
+   Navigate to the analysis notebooks and open any notebook.
+
+### Option 2: Docker Setup
+
+1. **Build the Docker image**
+   ```bash
+   docker build -t morphine-analysis .
+   ```
+
+2. **Run the container**
+   ```bash
+   docker run -p 8888:8888 -v $(pwd):/workspace morphine-analysis
+   ```
+
+3. **Access Jupyter Lab**
+   Open your browser and navigate to: `http://localhost:8888`
 
 ### Verify Installation
 
@@ -85,7 +100,12 @@ DSC-180B-Tasks/
 │   ├── morph2rep_estrous_calendar_days.ipynb
 │   ├── estrous.ipynb
 │   ├── morph2rep_estrous_analysis.ipynb
-│   └── smarr.ipynb
+│   ├── smarr.ipynb
+│   ├── estrus_plateau_core_analysis.ipynb
+│   └── estrus_plateau_extended_analysis_per_cage.ipynb
+├── Dockerfile                  # Docker configuration
+├── .dockerignore               # Docker ignore patterns
+├── requirements.txt            # Python dependencies
 ├── README.md                   # This file
 └── technical_documentation.md  # Detailed PCA documentation
 ```
@@ -164,29 +184,59 @@ DSC-180B-Tasks/
 #### [test_model/](test_model/)
 **Opioid sensitivity prediction pipeline**
 
-A complete pipeline for predicting morphine response from baseline behavioral features.
+A complete automated pipeline for predicting morphine response from baseline behavioral features. The pipeline downloads data from S3, extracts features, and trains predictive models—no manual data preparation required.
 
-- **[README_FINAL (1).md](test_model/README_FINAL%20(1).md)** - Full documentation and usage instructions
+**Quick Start:**
+```bash
+cd test_model/
+python run_pipeline_final.py
+```
+
+**Expected runtime:** 30-60 minutes
+
+**What the pipeline does:**
+1. Downloads data from S3 using DuckDB (no AWS credentials needed)
+2. Extracts ~40 baseline behavioral features per cage
+3. Calculates morphine response outcomes
+4. Trains and validates 4 predictive models
+5. Generates visualizations and reports
+
+**Command line options:**
+```bash
+# Use existing features/outcomes (skip extraction)
+python run_pipeline_final.py --skip-features --skip-outcomes
+
+# Add permutation test for significance
+python run_pipeline_final.py --permutation
+
+# Add bootstrap confidence intervals
+python run_pipeline_final.py --bootstrap
+```
+
+**Key Scripts:**
+- **[run_pipeline_final.py](test_model/run_pipeline_final.py)** - Main entry point
 - **[feature_extraction_final (1).py](test_model/feature_extraction_final%20(1).py)** - Extracts 40+ baseline behavioral features
 - **[outcome_extraction_final (1) (1).py](test_model/outcome_extraction_final%20(1)%20(1).py)** - Calculates morphine response outcomes
 - **[modeling_pipeline (1).py](test_model/modeling_pipeline%20(1).py)** - Trains and validates 4 predictive models
 - **[dose_stratified_analysis (1).py](test_model/dose_stratified_analysis%20(1).py)** - Dose-specific prediction analysis
-- **[minimal_model (1).py](test_model/minimal_model%20(1).py)** - Simplified model for quick testing
-- **[reduced_model.py](test_model/reduced_model.py)** - Feature-reduced model variant
 
-**Features extracted include:**
-- Circadian rhythm (amplitude, acrophase, robustness)
-- Locomotion metrics (distance, speed, variability)
-- Rest fragmentation (bout duration, transitions)
-- Bout structure (frequency, duration, burstiness)
+**Features extracted (40+):**
+- **Circadian rhythm** (6 features): amplitude, acrophase, robustness, light/dark ratio
+- **Locomotion** (7 features): distance, speed, variability, peak activity
+- **Rest fragmentation** (5 features): bout duration, fragmentation index, transitions
+- **Bout structure** (8 features): frequency, duration, CV, trade-off residual, burstiness
+- **Temporal patterns** (4 features): inter-bout intervals, variability
+- **Activity states** (4 features): active, inactive, climbing proportions
 - Social behavior, respiration, drinking
 
 **Research hypotheses tested:**
-- H1: Higher circadian amplitude → greater morphine response
-- H2: Fragmented rest → greater morphine sensitivity
-- H3: Higher baseline variability → greater response
-- H4: Bout frequency-duration trade-off predicts response
-- H5: Stronger prediction at lower doses
+- **H1:** Higher circadian amplitude → greater morphine response
+- **H2:** Fragmented rest → greater morphine sensitivity
+- **H3:** Higher baseline variability → greater response
+- **H4:** Bout frequency-duration trade-off predicts response
+- **H5:** Stronger prediction at lower doses
+
+**See [README_FINAL (1).md](test_model/README_FINAL%20(1).md) for complete documentation.**
 
 ---
 
@@ -210,6 +260,13 @@ A complete pipeline for predicting morphine response from baseline behavioral fe
 - **[estrous.ipynb](estrous/estrous.ipynb)** - Estrous detection methods development
 - **[morph2rep_estrous_analysis.ipynb](estrous/morph2rep_estrous_analysis.ipynb)** - Alternative analysis approach
 - **[smarr.ipynb](estrous/smarr.ipynb)** - Implementation of Smarr et al. wavelet method
+
+---
+
+#### Estrus Plateau Analysis
+
+- **[estrus_plateau_core_analysis.ipynb](estrous/estrus_plateau_core_analysis.ipynb)** - Estrus-linked locomotor plateau detection using 60s resolution per-animal locomotion data
+- **[estrus_plateau_extended_analysis_per_cage.ipynb](estrous/estrus_plateau_extended_analysis_per_cage.ipynb)** - Extended permutation testing and visualization of estrus-linked plateau structure per cage
 
 ---
 
@@ -249,37 +306,6 @@ s3://jax-envision-public-data/study_1001/2025v3.3/tabular/
 | Vehicle   | Saline control               |
 | 5 mg/kg   | Low dose morphine            |
 | 25 mg/kg  | High dose morphine           |
-
----
-
-## Key Findings
-
-### Morphine Effects
-- **Strong dose-response:** 25 mg/kg produces 7-54× increase in locomotion vs baseline
-- **Reproducible:** Effects consistent across both replicates
-- **Circadian interaction:** Higher fold-change at 5 PM injections (due to lower baseline)
-- **No sensitization:** Similar responses between first and second doses
-- **Multi-dimensional:** Morphine affects not just locomotion but also drinking, feeding patterns
-
-### PCA Insights
-- PC1 captures 57% of variance (active/locomotion vs drinking/feeding trade-off)
-- PC2 captures 22% of variance
-- Clear separation between dose groups in PC space
-- Temporal trajectories show peak effect at 60-180 min post-injection
-
----
-
-## Next Steps
-
-1. **Estrous-Morphine Integration**
-   - Combine estrous phase assignments with morphine response data
-   - Test hypothesis: estrous phase modulates morphine sensitivity
-
-2. **Individual Response Prediction**
-   - Use baseline behavioral features to predict morphine response magnitude
-
-3. **Extended Time Window**
-   - Analyze longer-term effects (24-48 hours post-injection)
 
 ---
 
