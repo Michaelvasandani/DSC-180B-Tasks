@@ -179,9 +179,31 @@ DSC-180B-Tasks/
 
 ---
 
-### Modeling Pipeline
+### Estrous Cycle Analysis
 
-#### [test_model/](test_model/)
+#### [morph2rep_estrous_calendar_days.ipynb](estrous/morph2rep_estrous_calendar_days.ipynb)
+Detects estrous cycle phases from activity patterns across calendar days using wavelet analysis and activity thresholding methods. Aligns with morphine injection dates for future integration analysis.
+
+#### [estrous.ipynb](estrous/estrous.ipynb)
+Estrous detection methods development and exploration.
+
+#### [morph2rep_estrous_analysis.ipynb](estrous/morph2rep_estrous_analysis.ipynb)
+Alternative approach to estrous cycle analysis for morphine study animals.
+
+#### [smarr.ipynb](estrous/smarr.ipynb)
+Implementation of the Smarr et al. wavelet-based estrous detection method.
+
+#### [estrus_plateau_core_analysis.ipynb](estrous/estrus_plateau_core_analysis.ipynb)
+Estrus-linked locomotor plateau detection using 60-second resolution per-animal locomotion data.
+
+#### [estrus_plateau_extended_analysis_per_cage.ipynb](estrous/estrus_plateau_extended_analysis_per_cage.ipynb)
+Extended permutation testing and visualization of estrus-linked plateau structure analyzed per cage.
+
+---
+
+## Modeling Pipeline
+
+### [test_model/](test_model/)
 **Opioid sensitivity prediction pipeline**
 
 A complete automated pipeline for predicting morphine response from baseline behavioral features. The pipeline downloads data from S3, extracts features, and trains predictive models—no manual data preparation required.
@@ -237,36 +259,6 @@ python run_pipeline_final.py --bootstrap
 - **H5:** Stronger prediction at lower doses
 
 **See [README_FINAL (1).md](test_model/README_FINAL%20(1).md) for complete documentation.**
-
----
-
-### Estrous Cycle Analysis
-
-#### [morph2rep_estrous_calendar_days.ipynb](estrous/morph2rep_estrous_calendar_days.ipynb)
-**Primary estrous cycle detection for morphine study animals**
-
-- Detects estrous cycle phases from activity patterns across calendar days
-- Uses wavelet analysis and/or activity thresholding methods
-- Aligns with morphine injection dates for future integration analysis
-
-**Key outputs:**
-- Estrous phase classifications by day
-- Cycle length distributions
-- Phase assignment for each animal
-
----
-
-#### Other Estrous Notebooks
-- **[estrous.ipynb](estrous/estrous.ipynb)** - Estrous detection methods development
-- **[morph2rep_estrous_analysis.ipynb](estrous/morph2rep_estrous_analysis.ipynb)** - Alternative analysis approach
-- **[smarr.ipynb](estrous/smarr.ipynb)** - Implementation of Smarr et al. wavelet method
-
----
-
-#### Estrus Plateau Analysis
-
-- **[estrus_plateau_core_analysis.ipynb](estrous/estrus_plateau_core_analysis.ipynb)** - Estrus-linked locomotor plateau detection using 60s resolution per-animal locomotion data
-- **[estrus_plateau_extended_analysis_per_cage.ipynb](estrous/estrus_plateau_extended_analysis_per_cage.ipynb)** - Extended permutation testing and visualization of estrus-linked plateau structure per cage
 
 ---
 
