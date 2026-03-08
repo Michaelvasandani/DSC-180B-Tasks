@@ -82,31 +82,35 @@ print("✓ All packages imported successfully!")
 
 ```
 DSC-180B-Tasks/
-├── morphine_analysis/          # Morphine behavioral analysis
-│   ├── Morphine_eda_all_doses.ipynb
-│   ├── Morphine_feature_interaction.ipynb
-│   └── pca_analysis/
-│       └── PCA_analysis.ipynb
-├── morphine_features/          # Morphine feature exploration & heatmaps
-│   ├── morphine_features.ipynb
-│   ├── morphine_heatmap.ipynb
-│   └── morphine_heatmap2.ipynb
-├── test_model/                 # Opioid sensitivity prediction pipeline
-│   ├── README_FINAL (1).md
-│   ├── feature_extraction_final (1).py
-│   ├── outcome_extraction_final (1) (1).py
-│   ├── modeling_pipeline (1).py
-│   ├── dose_stratified_analysis (1).py
-│   └── ... (additional scripts)
-├── estrous/                    # Estrous cycle detection
-│   ├── morph2rep_estrous_calendar_days.ipynb
-│   ├── estrous.ipynb
-│   ├── morph2rep_estrous_analysis.ipynb
-│   ├── smarr.ipynb
-│   ├── estrus_plateau_core_analysis.ipynb
-│   └── estrus_plateau_extended_analysis_per_cage.ipynb
-├── fault_detection/            # Tracking quality analysis
-│   └── fault_analysis.ipynb
+├── src/                        # Reusable source code
+│   ├── features/               # Feature extraction modules
+│   │   ├── feature_extraction_final.py
+│   │   ├── outcome_extraction_final.py
+│   │   └── extract_final_corrected.py
+│   └── models/                 # Model training and analysis pipelines
+│       ├── modeling_pipeline.py
+│       ├── dose_stratified_analysis.py
+│       ├── minimal_model.py
+│       └── ... (sensitivity classification scripts)
+├── notebooks/                  # Analysis notebooks (organized by topic)
+│   ├── 01_morphine_analysis/
+│   │   ├── Morphine_eda_all_doses.ipynb
+│   │   ├── Morphine_feature_interaction.ipynb
+│   │   ├── morphine_features.ipynb
+│   │   └── pca_analysis/
+│   │       └── PCA_analysis.ipynb
+│   ├── 02_estrous_detection/
+│   │   ├── morph2rep_estrous_calendar_days.ipynb
+│   │   ├── estrus_plateau_core_analysis.ipynb
+│   │   └── wavelet_autoQC_pca_gmm_montecarlo.ipynb
+│   ├── 03_sensitivity_prediction/
+│   │   └── monte_carlo.ipynb
+│   └── 04_fault_detection/
+│       └── fault_analysis.ipynb
+├── scripts/                    # Executable scripts and documentation
+│   └── README_modeling_pipeline.md
+├── results/                    # Generated outputs (gitignored)
+├── outputs/                    # Intermediate outputs (gitignored)
 ├── Dockerfile                  # Docker configuration
 ├── .dockerignore               # Docker ignore patterns
 ├── requirements.txt            # Python dependencies
@@ -120,7 +124,7 @@ DSC-180B-Tasks/
 
 ### Morphine Analysis
 
-#### [Morphine_eda_all_doses.ipynb](morphine_analysis/Morphine_eda_all_doses.ipynb)
+#### [Morphine_eda_all_doses.ipynb](notebooks/01_morphine_analysis/Morphine_eda_all_doses.ipynb)
 **Primary morphine analysis across all injection events**
 
 - Analyzes all 4 injection events (2 replicates × 2 doses each)
@@ -139,7 +143,7 @@ DSC-180B-Tasks/
 
 ---
 
-#### [Morphine_feature_interaction.ipynb](morphine_analysis/Morphine_feature_interaction.ipynb)
+#### [Morphine_feature_interaction.ipynb](notebooks/01_morphine_analysis/Morphine_feature_interaction.ipynb)
 **Individual consistency analysis across behavioral dimensions**
 
 - Examines correlations between 7 behavioral features per animal
@@ -155,7 +159,7 @@ DSC-180B-Tasks/
 
 ---
 
-#### [pca_analysis/PCA_analysis.ipynb](morphine_analysis/pca_analysis/PCA_analysis.ipynb)
+#### [pca_analysis/PCA_analysis.ipynb](notebooks/01_morphine_analysis/pca_analysis/PCA_analysis.ipynb)
 **Dimensionality reduction to identify behavioral state signatures**
 
 - Reduces 4 key features (active, locomotion, drinking, feeding) to 2 principal components
@@ -174,84 +178,55 @@ DSC-180B-Tasks/
 
 ---
 
-#### [morphine_features/](morphine_features/)
+#### Morphine Feature Exploration
 **Morphine feature exploration and heatmap visualizations**
 
-- **[morphine_features.ipynb](morphine_features/morphine_features.ipynb)** - Feature extraction and exploration
-- **[morphine_heatmap.ipynb](morphine_features/morphine_heatmap.ipynb)** - Heatmap visualization of morphine effects
-- **[morphine_heatmap2.ipynb](morphine_features/morphine_heatmap2.ipynb)** - Additional heatmap analyses
+- **[morphine_features.ipynb](notebooks/01_morphine_analysis/morphine_features.ipynb)** - Feature extraction and exploration
+- **[morphine_heatmap.ipynb](notebooks/01_morphine_analysis/morphine_heatmap.ipynb)** - Heatmap visualization of morphine effects
+- **[morphine_heatmap2.ipynb](notebooks/01_morphine_analysis/morphine_heatmap2.ipynb)** - Additional heatmap analyses
 
 ---
 
 ### Fault Detection
 
-#### [fault_detection/fault_analysis.ipynb](fault_detection/fault_analysis.ipynb)
+#### [fault_analysis.ipynb](notebooks/04_fault_detection/fault_analysis.ipynb)
 Validates tracking system quality by identifying missing data, unusual inactivity patterns, and potential sensor failures across both replicates. Aggregates quality metrics per animal and cage using heatmaps and streak detection to flag animals with poor tracking coverage.
 
 ---
 
-### Estrous Cycle Analysis
+### Estrous Cycle Detection
 
-#### [morph2rep_estrous_calendar_days.ipynb](estrous/morph2rep_estrous_calendar_days.ipynb)
-Detects estrous cycle phases from activity patterns across calendar days using wavelet analysis and activity thresholding methods. Aligns with morphine injection dates for future integration analysis.
+#### [Morph2REP_ultradian_cyclicity_clipQuantileBaseline.ipynb](notebooks/02_estrous_detection/Morph2REP_ultradian_cyclicity_clipQuantileBaseline.ipynb)
+Detects ultradian (short-term) cyclicity in locomotor activity patterns using wavelet analysis with baseline clipping at quantile thresholds. Identifies estrous-related behavioral rhythms in the Morph2REP study animals.
 
-#### [estrous.ipynb](estrous/estrous.ipynb)
-Estrous detection methods development and exploration.
+#### [Morph2REP_ultradian_wavelet.ipynb](notebooks/02_estrous_detection/Morph2REP_ultradian_wavelet.ipynb)
+Wavelet-based analysis for detecting ultradian cycles in the Morph2REP dataset. Examines high-frequency behavioral oscillations that may correlate with estrous cycle phases.
 
-#### [morph2rep_estrous_analysis.ipynb](estrous/morph2rep_estrous_analysis.ipynb)
-Alternative approach to estrous cycle analysis for morphine study animals.
+#### [cyclicity_visualization_full_notebook_share.ipynb](notebooks/02_estrous_detection/cyclicity_visualization_full_notebook_share.ipynb)
+Comprehensive visualization of cyclicity patterns across all animals. Creates publication-ready figures showing estrous-related behavioral rhythms and their temporal dynamics.
 
-#### [smarr.ipynb](estrous/smarr.ipynb)
-Implementation of the Smarr et al. wavelet-based estrous detection method.
+#### [estrus_plateau_core_analysis.ipynb](notebooks/02_estrous_detection/estrus_plateau_core_analysis.ipynb)
+Core analysis detecting estrus-linked locomotor plateaus using high-resolution (60-second) activity data. Identifies sustained elevation in activity characteristic of the estrus phase.
 
-#### [estrus_plateau_core_analysis.ipynb](estrous/estrus_plateau_core_analysis.ipynb)
-Estrus-linked locomotor plateau detection using 60-second resolution per-animal locomotion data.
+#### [estrus_plateau_extended_analysis_per_cage.ipynb](notebooks/02_estrous_detection/estrus_plateau_extended_analysis_per_cage.ipynb)
+Extended analysis of estrus plateaus with cage-level organization. Includes permutation testing to validate statistical significance of observed plateau structures and cage-specific effects.
 
-#### [estrus_plateau_extended_analysis_per_cage.ipynb](estrous/estrus_plateau_extended_analysis_per_cage.ipynb)
-Extended permutation testing and visualization of estrus-linked plateau structure analyzed per cage.
+#### [smarr_positive_control.ipynb](notebooks/02_estrous_detection/smarr_positive_control.ipynb)
+Implements the Smarr et al. wavelet-based estrous detection method as a positive control. Validates our custom detection methods against an established published approach.
 
 ---
 
 ## Modeling Pipeline
 
-### [test_model/](test_model/)
-**Opioid sensitivity prediction pipeline**
+### Opioid Sensitivity Prediction Pipeline
 
 A complete automated pipeline for predicting morphine response from baseline behavioral features. The pipeline downloads data from S3, extracts features, and trains predictive models—no manual data preparation required.
 
-**Quick Start:**
-```bash
-cd test_model/
-python run_pipeline_final.py
-```
-
-**Expected runtime:** 30-60 minutes
-
-**What the pipeline does:**
-1. Downloads data from S3 using DuckDB (no AWS credentials needed)
-2. Extracts ~40 baseline behavioral features per cage
-3. Calculates morphine response outcomes
-4. Trains and validates 4 predictive models
-5. Generates visualizations and reports
-
-**Command line options:**
-```bash
-# Use existing features/outcomes (skip extraction)
-python run_pipeline_final.py --skip-features --skip-outcomes
-
-# Add permutation test for significance
-python run_pipeline_final.py --permutation
-
-# Add bootstrap confidence intervals
-python run_pipeline_final.py --bootstrap
-```
-
 **Key Scripts:**
-- **[run_pipeline_final.py](test_model/run_pipeline_final.py)** - Main entry point
-- **[feature_extraction_final (1).py](test_model/feature_extraction_final%20(1).py)** - Extracts 40+ baseline behavioral features
-- **[outcome_extraction_final (1) (1).py](test_model/outcome_extraction_final%20(1)%20(1).py)** - Calculates morphine response outcomes
-- **[modeling_pipeline (1).py](test_model/modeling_pipeline%20(1).py)** - Trains and validates 4 predictive models
-- **[dose_stratified_analysis (1).py](test_model/dose_stratified_analysis%20(1).py)** - Dose-specific prediction analysis
+- **[feature_extraction_final.py](src/features/feature_extraction_final.py)** - Extracts 40+ baseline behavioral features
+- **[outcome_extraction_final.py](src/features/outcome_extraction_final.py)** - Calculates morphine response outcomes
+- **[modeling_pipeline.py](src/models/modeling_pipeline.py)** - Trains and validates 4 predictive models
+- **[dose_stratified_analysis.py](src/models/dose_stratified_analysis.py)** - Dose-specific prediction analysis
 
 **Features extracted (40+):**
 - **Circadian rhythm** (6 features): amplitude, acrophase, robustness, light/dark ratio
@@ -269,7 +244,7 @@ python run_pipeline_final.py --bootstrap
 - **H4:** Bout frequency-duration trade-off predicts response
 - **H5:** Stronger prediction at lower doses
 
-**See [README_FINAL (1).md](test_model/README_FINAL%20(1).md) for complete documentation.**
+**See [README_modeling_pipeline.md](scripts/README_modeling_pipeline.md) for complete documentation.**
 
 ---
 

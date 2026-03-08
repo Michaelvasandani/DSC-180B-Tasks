@@ -57,3 +57,11 @@ models/
 # Temporary files
 *.tmp
 .cache/
+
+# Generated outputs and results
+results/
+outputs/
+figures/
+*.png
+*.pdf
+*.svg
