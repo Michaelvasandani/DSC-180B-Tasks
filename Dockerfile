@@ -22,10 +22,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
-COPY morphine_analysis/ ./morphine_analysis/
-COPY morphine_features/ ./morphine_features/
-COPY test_model/ ./test_model/
-COPY estrous/ ./estrous/
+COPY src/ ./src/
+COPY notebooks/ ./notebooks/
+COPY scripts/ ./scripts/
 COPY README.md .
 COPY technical_documentation.md .
 

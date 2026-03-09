@@ -38,6 +38,14 @@ desktop.ini
 *.log
 untitled.txt
 
+# Generated outputs
+results/
+outputs/
+figures/
+*.png
+*.pdf
+*.svg
+
 # Docker
 Dockerfile
 .dockerignore

@@ -58,6 +58,11 @@ models/
 *.tmp
 .cache/
 
+# Test files (not to be committed)
+test_*.ipynb
+*_test.ipynb
+test_environment.ipynb
+
 # Generated outputs and results
 results/
 outputs/
