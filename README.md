@@ -214,7 +214,7 @@ Extended analysis of estrus plateaus with cage-level organization. Includes perm
 #### [smarr_positive_control.ipynb](notebooks/02_estrous_detection/smarr_positive_control.ipynb)
 Implements the Smarr et al. wavelet-based estrous detection method as a positive control. Validates our custom detection methods against an established published approach.
 
-### [smarr_neg_control.ipynb](notebooks/02_estrous_detection/smarr_neg_control.ipynb) 
+#### [smarr_neg_control.ipynb](notebooks/02_estrous_detection/smarr_neg_control.ipynb) 
 Implements a negative control using the Smarr et al. approach to verify that estrus cyclicity detection does not appear in datasets where it should not exist. Serves as a validation check for the robustness of the cyclicity detection pipeline.
 
 ---
